@@ -42,13 +42,15 @@ private:
 	QLabel *imageLabel;
 	QScrollArea *scrollArea;
 	QRubberBand *rubberBand;
-	QPoint origin;
+	int x[2], y[2];
+	int xi, yj;
 	double scaleFactor;
 	double ratio;
 	void setImage(const QImage&);
 	void rescaleImage(double);
 	void adjustScrollBar(QScrollBar*, double);
 	void createActions();
+	void adjustRubberBand(QMouseEvent *);
 };
 
 #endif
