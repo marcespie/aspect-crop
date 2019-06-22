@@ -19,19 +19,20 @@
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
 class QRubberBand;
+class QGraphicsView;
 
 class ImageItem: public QGraphicsPixmapItem
 {
 public:
-	ImageItem(QPixmap&, QWidget *parent);
+	ImageItem(QPixmap&, QGraphicsView* parent);
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 private:
 	QRubberBand *rubberBand;
-	QWidget *window;
-	float x[2], y[2];
+	QGraphicsView *view;
+	int x[2], y[2];
 	int xi, yj;
 	double ratio;
 	void adjustRubberBand(QGraphicsSceneMouseEvent *);

@@ -16,10 +16,13 @@
 
 #include <QGraphicsSceneMouseEvent>
 #include <QRubberBand>
+#include <QGraphicsView>
+#include <iostream>
+#include <tuple>
 #include "imageitem.h"
 
-ImageItem::ImageItem(QPixmap& p, QWidget* parent): 
-	QGraphicsPixmapItem(p), rubberBand(nullptr), window(parent)
+ImageItem::ImageItem(QPixmap& p, QGraphicsView* parent): 
+	QGraphicsPixmapItem(p), rubberBand(nullptr), view(parent)
 {
 	ratio = 16.0/9.0;
 }
@@ -30,34 +33,24 @@ inline T absdiff(T a, T b)
 	return a < b ? b - a : a - b;
 }
 
-inline QPointF getpos(const QGraphicsSceneMouseEvent *event)
+inline std::pair<int, int> getpos(QWidget *window, 
+    const QGraphicsSceneMouseEvent *event)
 {
-	return event->screenPos();
-}
-
-inline float getposx(const QGraphicsSceneMouseEvent *event)
-{
-	return getpos(event).x();
-}
-
-inline float getposy(const QGraphicsSceneMouseEvent *event)
-{
-	return getpos(event).y();
+	auto p = window->mapFromGlobal(event->screenPos());
+	return std::pair(p.x(), p.y());
 }
 
 void 
 ImageItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
 	if (!rubberBand) {
-		rubberBand = new QRubberBand(QRubberBand::Rectangle);
+		rubberBand = new QRubberBand(QRubberBand::Rectangle, view);
 		rubberBand->setWindowOpacity(0.5);
 		xi = 1;
 		yj = 1;
-		x[0] = getposx(event);
-		y[0] = getposy(event);
+		std::tie(x[0], y[0]) = getpos(view, event);
 	} else {
-		auto a = getposx(event);
-		auto b = getposy(event);
+		auto [a, b] = getpos(view, event);
 		if (absdiff(x[0], a) < absdiff(x[1], a))
 			xi = 0;
 		else 
@@ -74,8 +67,7 @@ ImageItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void
 ImageItem::adjustRubberBand(QGraphicsSceneMouseEvent *event)
 {
-	x[xi] = getposx(event);
-	y[yj] = getposy(event);
+	std::tie( x[xi], y[yj]) = getpos(view, event);
 
 	auto d = (x[1]-x[0]) - (y[1]-y[0]) * ratio;
 	if (d > 0.0) {
@@ -102,5 +94,12 @@ ImageItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void 
 ImageItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-//	rubberBand->hide();
+	auto a = view->mapToScene(x[0], y[0]);
+	auto b = view->mapToScene(x[1], y[1]);
+	auto x0 = a.x();
+	auto y0 = a.y();
+	auto x1 = b.x();
+	auto y1 = b.y();
+
+	std::cout << x1-x0 << "x" << y1-y0 << "+" << x0 << "+" <<y0<<"\n";
 }

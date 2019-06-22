@@ -52,7 +52,7 @@ ImageWindow::setImage(const QImage& i)
 	image = i;
 
 	auto p = QPixmap::fromImage(image);
-	auto item = new ImageItem(p, this);
+	auto item = new ImageItem(p, view);
 	scene->addItem(item);
 }
 
