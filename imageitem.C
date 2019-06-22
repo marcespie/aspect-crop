@@ -19,12 +19,13 @@
 #include <QGraphicsView>
 #include <iostream>
 #include <tuple>
+#include <cmath>
 #include "imageitem.h"
 
 ImageItem::ImageItem(QPixmap& p, QGraphicsView* parent): 
 	QGraphicsPixmapItem(p), rubberBand(nullptr), view(parent)
 {
-	ratio = 16.0/9.0;
+	ratio = 9.0/16.0;
 }
 
 template<typename T>
@@ -101,5 +102,6 @@ ImageItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 	auto x1 = b.x();
 	auto y1 = b.y();
 
-	std::cout << x1-x0 << "x" << y1-y0 << "+" << x0 << "+" <<y0<<"\n";
+	std::cout << round(x1-x0) << "x" << round(y1-y0) << 
+	    "+" << round(x0) << "+" << round(y0) <<"\n";
 }
