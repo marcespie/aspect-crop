@@ -17,21 +17,17 @@
 #include <iostream>
 #include "imagewindow.h"
 
-ImageWindow::ImageWindow():
-	imageLabel{new QLabel},
-	scrollArea{new QScrollArea}
+ImageWindow::ImageWindow()
 {
-	imageLabel->setBackgroundRole(QPalette::Base);
-	imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-	imageLabel->setScaledContents(true);
+	scene = new QGraphicsScene(this);
+	view = new QGraphicsView;
+	view->setScene(scene);
 
 	rubberBand = nullptr;
 	scaleFactor = 1;
 	ratio = 16.0/9.0;
-	scrollArea->setBackgroundRole(QPalette::Dark);
-	scrollArea->setWidget(imageLabel);
-	scrollArea->setVisible(false);
-	setCentralWidget(scrollArea);
+	view->setVisible(true);
+	setCentralWidget(view);
 	resize(QGuiApplication::primaryScreen()->availableSize() * 0.9);
 	createActions();
 }
@@ -57,10 +53,7 @@ ImageWindow::setImage(const QImage& i)
 	image = i;
 
 	auto p = QPixmap::fromImage(image);
-	imageLabel->setPixmap(p);
-	scrollArea->setVisible(true);
-	imageLabel->adjustSize();
-	rescaleImage(0.2);
+	scene->addPixmap(p);
 }
 
 void 
@@ -80,16 +73,9 @@ void
 ImageWindow::rescaleImage(double factor)
 {
 	scaleFactor *= factor;
-	imageLabel->resize(scaleFactor * imageLabel->pixmap()->size());
-	adjustScrollBar(scrollArea->horizontalScrollBar(), factor);
-	adjustScrollBar(scrollArea->verticalScrollBar(), factor);
-}
-
-void 
-ImageWindow::adjustScrollBar(QScrollBar* scrollBar, double factor)
-{
-	scrollBar->setValue(int(factor * scrollBar->value()
-	    + (factor -1)*scrollBar->pageStep()/2));
+	QMatrix matrix;
+	matrix.scale(scaleFactor, scaleFactor);
+	view->setMatrix(matrix);
 }
 
 void 

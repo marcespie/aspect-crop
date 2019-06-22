@@ -24,7 +24,7 @@ main(int argc, char *argv[])
 	QApplication app(argc, argv);
 
 	ImageWindow i;
-	
+
 	if (argc < 2) {
 		std::cerr << "Usage: aspect-crop picture\n";
 		exit(1);

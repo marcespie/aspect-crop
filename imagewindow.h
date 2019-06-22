@@ -19,11 +19,13 @@
 #include <QMainWindow>
 #include <QImage>
 
-class QLabel;
+class QGraphicsScene;
 class QScrollArea;
 class QScrollBar;
 class QRubberBand;
 class QMouseEvent;
+class QGraphicsScene;
+class QGraphicsView;
 
 class ImageWindow: public QMainWindow
 {
@@ -38,9 +40,9 @@ private slots:
 	void mouseMoveEvent(QMouseEvent*);
 	void mouseReleaseEvent(QMouseEvent*);
 private:
+	QGraphicsScene *scene;
+	QGraphicsView *view;
 	QImage image;
-	QLabel *imageLabel;
-	QScrollArea *scrollArea;
 	QRubberBand *rubberBand;
 	int x[2], y[2];
 	int xi, yj;
@@ -48,7 +50,6 @@ private:
 	double ratio;
 	void setImage(const QImage&);
 	void rescaleImage(double);
-	void adjustScrollBar(QScrollBar*, double);
 	void createActions();
 	void adjustRubberBand(QMouseEvent *);
 };
