@@ -39,7 +39,7 @@ private:
 	double scaleFactor;
 	double ratio;
 	void setImage(const QImage&);
-	void rescaleImage(double);
+	void rescaleImage();
 	void createActions();
 };
 

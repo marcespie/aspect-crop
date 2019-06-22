@@ -24,10 +24,11 @@ ImageWindow::ImageWindow()
 	view = new QGraphicsView;
 	view->setScene(scene);
 
-	scaleFactor = 1;
+	scaleFactor = 0.3;
 	view->setVisible(true);
 	setCentralWidget(view);
 	resize(QGuiApplication::primaryScreen()->availableSize() * 0.9);
+	rescaleImage();
 	createActions();
 }
 
@@ -51,27 +52,28 @@ ImageWindow::setImage(const QImage& i)
 	image = i;
 
 	auto p = QPixmap::fromImage(image);
-	auto item = new ImageItem(p, view);
+	auto item = new ImageItem(p, this);
 	scene->addItem(item);
 }
 
 void 
 ImageWindow::zoomIn()
 {
-	rescaleImage(1.25);
+	scaleFactor *= 1.2;
+	rescaleImage();
 }
 
 void 
 ImageWindow::zoomOut()
 {
-	rescaleImage(0.8);
+	scaleFactor /= 1.2;
+	rescaleImage();
 }
 
 
 void 
-ImageWindow::rescaleImage(double factor)
+ImageWindow::rescaleImage()
 {
-	scaleFactor *= factor;
 	QMatrix matrix;
 	matrix.scale(scaleFactor, scaleFactor);
 	view->setMatrix(matrix);
