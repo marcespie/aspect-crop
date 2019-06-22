@@ -33,7 +33,7 @@ ImageWindow::ImageWindow()
 }
 
 bool 
-ImageWindow::loadPicture(const QString& filename)
+ImageWindow::loadPicture(const char* filename)
 {
 	QImageReader r(filename);
 	r.setAutoTransform(true);
@@ -41,18 +41,18 @@ ImageWindow::loadPicture(const QString& filename)
 	if (i.isNull())
 		return false;
 	else {
-		setImage(i);
+		setImage(i, filename);
 		return true;
 	}
 }
 
 void 
-ImageWindow::setImage(const QImage& i)
+ImageWindow::setImage(const QImage& i, const char* title)
 {
 	image = i;
 
 	auto p = QPixmap::fromImage(image);
-	auto item = new ImageItem(p, view);
+	auto item = new ImageItem(p, view, title);
 	scene->addItem(item);
 }
 

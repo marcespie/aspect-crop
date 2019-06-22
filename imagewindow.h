@@ -28,7 +28,7 @@ class ImageWindow: public QMainWindow
 	Q_OBJECT
 public:
 	ImageWindow();
-	bool loadPicture(const QString&);
+	bool loadPicture(const char*);
 private slots:
 	void zoomIn();
 	void zoomOut();
@@ -38,7 +38,7 @@ private:
 	QImage image;
 	double scaleFactor;
 	double ratio;
-	void setImage(const QImage&);
+	void setImage(const QImage&, const char*);
 	void rescaleImage();
 	void createActions();
 };

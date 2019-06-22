@@ -24,7 +24,7 @@ class QGraphicsView;
 class ImageItem: public QGraphicsPixmapItem
 {
 public:
-	ImageItem(QPixmap&, QGraphicsView* parent);
+	ImageItem(QPixmap&, QGraphicsView*, const char*);
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
@@ -32,6 +32,7 @@ protected:
 private:
 	QRubberBand *rubberBand;
 	QGraphicsView *view;
+	const char* title;
 	int x[2], y[2];
 	int xi, yj;
 	double ratio;

@@ -22,8 +22,9 @@
 #include <cmath>
 #include "imageitem.h"
 
-ImageItem::ImageItem(QPixmap& p, QGraphicsView* parent): 
-	QGraphicsPixmapItem(p), rubberBand(nullptr), view(parent)
+ImageItem::ImageItem(QPixmap& p, QGraphicsView* parent, const char* s): 
+	QGraphicsPixmapItem(p), rubberBand(nullptr), view(parent),
+	title(s)
 {
 	ratio = 9.0/16.0;
 }
@@ -102,6 +103,6 @@ ImageItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 	auto x1 = b.x();
 	auto y1 = b.y();
 
-	std::cout << round(x1-x0) << "x" << round(y1-y0) << 
-	    "+" << round(x0) << "+" << round(y0) <<"\n";
+	std::cout << "--trim " <<round(x1-x0) << "x" << round(y1-y0) << 
+	    "+" << round(x0) << "+" << round(y0) <<" --focus " << title << "\n";
 }

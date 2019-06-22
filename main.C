@@ -30,9 +30,7 @@ main(int argc, char *argv[])
 		exit(1);
 	}
 
-	QString s = argv[1];
-
-	if (i.loadPicture(s)) {
+	if (i.loadPicture(argv[1])) {
 		i.show();
 		return app.exec();
 	} else {
