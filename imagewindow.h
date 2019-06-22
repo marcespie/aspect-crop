@@ -20,11 +20,7 @@
 #include <QImage>
 
 class QGraphicsScene;
-class QScrollArea;
-class QScrollBar;
-class QRubberBand;
 class QMouseEvent;
-class QGraphicsScene;
 class QGraphicsView;
 
 class ImageWindow: public QMainWindow
@@ -36,22 +32,15 @@ public:
 private slots:
 	void zoomIn();
 	void zoomOut();
-	void mousePressEvent(QMouseEvent*);
-	void mouseMoveEvent(QMouseEvent*);
-	void mouseReleaseEvent(QMouseEvent*);
 private:
 	QGraphicsScene *scene;
 	QGraphicsView *view;
 	QImage image;
-	QRubberBand *rubberBand;
-	int x[2], y[2];
-	int xi, yj;
 	double scaleFactor;
 	double ratio;
 	void setImage(const QImage&);
 	void rescaleImage(double);
 	void createActions();
-	void adjustRubberBand(QMouseEvent *);
 };
 
 #endif

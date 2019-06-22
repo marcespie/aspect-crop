@@ -16,6 +16,7 @@
 #include <QtWidgets>
 #include <iostream>
 #include "imagewindow.h"
+#include "imageitem.h"
 
 ImageWindow::ImageWindow()
 {
@@ -23,9 +24,7 @@ ImageWindow::ImageWindow()
 	view = new QGraphicsView;
 	view->setScene(scene);
 
-	rubberBand = nullptr;
 	scaleFactor = 1;
-	ratio = 16.0/9.0;
 	view->setVisible(true);
 	setCentralWidget(view);
 	resize(QGuiApplication::primaryScreen()->availableSize() * 0.9);
@@ -44,7 +43,6 @@ ImageWindow::loadPicture(const QString& filename)
 		setImage(i);
 		return true;
 	}
-	rubberBand = nullptr;
 }
 
 void 
@@ -53,7 +51,8 @@ ImageWindow::setImage(const QImage& i)
 	image = i;
 
 	auto p = QPixmap::fromImage(image);
-	scene->addPixmap(p);
+	auto item = new ImageItem(p, view);
+	scene->addItem(item);
 }
 
 void 
@@ -91,67 +90,3 @@ ImageWindow::createActions()
 	this->addAction(zo);
 }
 
-template<typename T>
-inline T absdiff(T a, T b)
-{
-	return a < b ? b - a : a - b;
-}
-
-void 
-ImageWindow::mousePressEvent(QMouseEvent *event)
-{
-	if (!rubberBand) {
-		rubberBand = new QRubberBand(QRubberBand::Rectangle, this);
-		xi = 1;
-		yj = 1;
-		x[0] = event->pos().x();
-		y[0] = event->pos().y();
-	} else {
-		int a = event->pos().x();
-		int b = event->pos().y();
-		if (absdiff(x[0], a) < absdiff(x[1], a))
-			xi = 0;
-		else 
-			xi = 1;
-		if (absdiff(y[0], b) < absdiff(y[1], b))
-			yj = 0;
-		else 
-			yj = 1;
-	}
-	adjustRubberBand(event);
-	rubberBand->show();
-}
-
-void
-ImageWindow::adjustRubberBand(QMouseEvent *event)
-{
-	x[xi] = event->pos().x();
-	y[yj] = event->pos().y();
-
-	auto d = (x[1]-x[0]) - (y[1]-y[0]) * ratio;
-	if (d > 0.0) {
-		if (xi == 1)
-			x[xi] -= d;
-		else
-			x[xi] += d;
-	} else if (d < 0.0) {
-		if (yj == 1)
-			y[yj] += d/ratio;
-		else
-			y[yj] -= d/ratio;
-	}
-
-	rubberBand->setGeometry(x[0], y[0], x[1]-x[0], y[1]-y[0]);
-}
-
-void 
-ImageWindow::mouseMoveEvent(QMouseEvent *event)
-{
-	adjustRubberBand(event);
-}
-
-void 
-ImageWindow::mouseReleaseEvent(QMouseEvent *event)
-{
-//	rubberBand->hide();
-}
