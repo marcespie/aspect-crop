@@ -72,6 +72,19 @@ ImageItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void
 ImageItem::constrainRubberBand()
 {
+	auto r = sceneBoundingRect();
+	for (auto& a: x)
+		if (a < r.left())
+			a = r.left();
+		else if (a > r.right())
+			a = r.right();
+
+	for (auto& b: y)
+		if (b < r.top())
+			b = r.top();
+		else if (b > r.bottom())
+			b = r.bottom();
+
 	auto d = (x[1]-x[0]) - (y[1]-y[0]) * ratio;
 	if (d > 0.0) {
 		if (xi == 1)
