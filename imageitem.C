@@ -36,16 +36,18 @@ inline T absdiff(T a, T b)
 void 
 ImageItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+	auto a = event->scenePos().x();
+	auto b = event->scenePos().y();
 	if (!rubberBand) {
-		rubberBand = std::make_unique<QRubberBand>(QRubberBand::Rectangle, view);
+		rubberBand = 
+		    std::make_unique<QRubberBand>(QRubberBand::Rectangle, view);
 		xi = 1;
 		yj = 1;
-		x[0] = event->scenePos().x();
-		y[0] = event->scenePos().y();
+		x[0] = a;
+		y[0] = b;
 		moving = false;
 	} else {
-		auto a = event->scenePos().x();
-		auto b = event->scenePos().y();
+		// find the nearest moving coordinates
 		if (absdiff(x[0], a) < absdiff(x[1], a))
 			xi = 0;
 		else 
@@ -59,17 +61,17 @@ ImageItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		moving = absdiff(x[xi], a) > absdiff((x[0]+x[1])/2, a)
 		    && absdiff(y[yj], b) > absdiff((y[0]+y[1])/2, b);
 	}
-	if (!moving)
-		constrainRubberBand(event);
+	if (!moving) {
+		x[xi] = a;
+		y[yj] = b;
+	}
+	constrainRubberBand();
 	rubberBand->show();
 }
 
 void
-ImageItem::constrainRubberBand(QGraphicsSceneMouseEvent *event)
+ImageItem::constrainRubberBand()
 {
-	x[xi] = event->scenePos().x();
-	y[yj] = event->scenePos().y();
-
 	auto d = (x[1]-x[0]) - (y[1]-y[0]) * ratio;
 	if (d > 0.0) {
 		if (xi == 1)
@@ -82,7 +84,6 @@ ImageItem::constrainRubberBand(QGraphicsSceneMouseEvent *event)
 		else
 			y[yj] -= d/ratio;
 	}
-
 	adjustRubberBand();
 }
 
@@ -104,9 +105,12 @@ ImageItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 		x[1] += deltax;
 		y[0] += deltay;
 		y[1] += deltay;
-		adjustRubberBand();
-	} else 
-		constrainRubberBand(event);
+	} else  {
+		x[xi] = event->scenePos().x();
+		y[yj] = event->scenePos().y();
+	}
+
+	constrainRubberBand();
 }
 
 void 

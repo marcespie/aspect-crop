@@ -137,5 +137,4 @@ ImageWindow::createActions()
 	zn->setShortcut(QKeySequence("n"));
 	connect(zn, SIGNAL(triggered()), this, SLOT(goNext()));
 	this->addAction(zn);
-
 }

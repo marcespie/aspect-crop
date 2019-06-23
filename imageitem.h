@@ -43,7 +43,7 @@ private:
 	int xi, yj;
 	bool moving;
 	double ratio;
-	void constrainRubberBand(QGraphicsSceneMouseEvent *);
+	void constrainRubberBand();
 	void adjustRubberBand();
 };
 
