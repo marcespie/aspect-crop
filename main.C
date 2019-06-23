@@ -26,7 +26,7 @@ main(int argc, char *argv[])
 	ImageWindow i;
 
 	if (argc < 2) {
-		std::cerr << "Usage: aspect-crop picture\n";
+		std::cerr << "Usage: aspect-crop picture...\n";
 		exit(1);
 	}
 

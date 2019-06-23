@@ -23,6 +23,7 @@ ImageWindow::ImageWindow()
 	scene = new QGraphicsScene(this);
 	view = new QGraphicsView;
 	view->setScene(scene);
+	image = nullptr;
 
 	scaleFactor = 0.3;
 	view->setVisible(true);
@@ -49,11 +50,13 @@ ImageWindow::loadPicture(const char* filename)
 void 
 ImageWindow::setImage(const QImage& i, const char* title)
 {
-	image = i;
-
-	auto p = QPixmap::fromImage(image);
-	auto item = new ImageItem(p, view, title);
-	scene->addItem(item);
+	auto p = QPixmap::fromImage(i);
+	if (image) {
+		scene->removeItem(image);
+		delete(image);
+	}
+	image = new ImageItem(p, view, title);
+	scene->addItem(image);
 }
 
 void 

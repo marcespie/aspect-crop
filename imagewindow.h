@@ -22,6 +22,7 @@
 class QGraphicsScene;
 class QMouseEvent;
 class QGraphicsView;
+class ImageItem;
 
 class ImageWindow: public QMainWindow
 {
@@ -35,7 +36,7 @@ private slots:
 private:
 	QGraphicsScene *scene;
 	QGraphicsView *view;
-	QImage image;
+	ImageItem *image;
 	double scaleFactor;
 	double ratio;
 	void setImage(const QImage&, const char*);
