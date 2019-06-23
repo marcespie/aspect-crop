@@ -40,13 +40,6 @@ inline T absdiff(T a, T b)
 	return a < b ? b - a : a - b;
 }
 
-inline std::pair<ImageItem::C, ImageItem::C> 
-getpos(const QGraphicsSceneMouseEvent* event)
-{
-	auto p = event->scenePos();
-	return std::pair(p.x(), p.y());
-}
-
 void 
 ImageItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
@@ -55,9 +48,11 @@ ImageItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		rubberBand->setWindowOpacity(0.5);
 		xi = 1;
 		yj = 1;
-		std::tie(x[0], y[0]) = getpos(event);
+		x[0] = event->scenePos().x();
+		y[0] = event->scenePos().y();
 	} else {
-		auto [a, b] = getpos(event);
+		auto a = event->scenePos().x();
+		auto b = event->scenePos().y();
 		if (absdiff(x[0], a) < absdiff(x[1], a))
 			xi = 0;
 		else 
@@ -67,14 +62,15 @@ ImageItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		else 
 			yj = 1;
 	}
-	adjustRubberBand(event);
+	constrainRubberBand(event);
 	rubberBand->show();
 }
 
 void
-ImageItem::adjustRubberBand(QGraphicsSceneMouseEvent *event)
+ImageItem::constrainRubberBand(QGraphicsSceneMouseEvent *event)
 {
-	std::tie(x[xi], y[yj]) = getpos(event);
+	x[xi] = event->scenePos().x();
+	y[yj] = event->scenePos().y();
 
 	auto d = (x[1]-x[0]) - (y[1]-y[0]) * ratio;
 	if (d > 0.0) {
@@ -89,6 +85,12 @@ ImageItem::adjustRubberBand(QGraphicsSceneMouseEvent *event)
 			y[yj] -= d/ratio;
 	}
 
+	adjustRubberBand();
+}
+
+void
+ImageItem::adjustRubberBand()
+{
 	auto p = view->mapFromScene(x[0], y[0], x[1]-x[0], y[1]-y[0]);
 
 	rubberBand->setGeometry(p.boundingRect());
@@ -97,13 +99,13 @@ ImageItem::adjustRubberBand(QGraphicsSceneMouseEvent *event)
 void 
 ImageItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-	adjustRubberBand(event);
+	constrainRubberBand(event);
 }
 
 void 
 ImageItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-	adjustRubberBand(event);
+	constrainRubberBand(event);
 }
 
 void 
@@ -120,9 +122,6 @@ void
 ImageItem::paint(QPainter* p, const QStyleOptionGraphicsItem* i, QWidget* w)
 {
 	QGraphicsPixmapItem::paint(p, i, w);
-	if (rubberBand) {
-		auto p = view->mapFromScene(x[0], y[0], x[1]-x[0], y[1]-y[0]);
-
-		rubberBand->setGeometry(p.boundingRect());
-	}
+	if (rubberBand)
+		adjustRubberBand();
 }

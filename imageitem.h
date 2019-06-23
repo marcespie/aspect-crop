@@ -41,7 +41,8 @@ private:
 	C x[2], y[2];
 	int xi, yj;
 	double ratio;
-	void adjustRubberBand(QGraphicsSceneMouseEvent *);
+	void constrainRubberBand(QGraphicsSceneMouseEvent *);
+	void adjustRubberBand();
 };
 
 #endif
