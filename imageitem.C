@@ -21,9 +21,8 @@
 #include <cmath>
 #include "imageitem.h"
 
-ImageItem::ImageItem(QPixmap& p, QGraphicsView* parent, const char* s, double r): 
-	QGraphicsPixmapItem{p}, rubberBand{nullptr}, view{parent},
-	title(s), ratio(r)
+ImageItem::ImageItem(QPixmap& p, QGraphicsView* v, const char* s, double r): 
+    QGraphicsPixmapItem{p}, rubberBand{nullptr}, view{v}, title{s}, ratio{r}
 {
 }
 
@@ -65,12 +64,12 @@ ImageItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		x[xi] = a;
 		y[yj] = b;
 	}
-	constrainRubberBand();
+	adjustRubberBand();
 	rubberBand->show();
 }
 
 void
-ImageItem::constrainRubberBand()
+ImageItem::adjustRubberBand()
 {
 	auto r = sceneBoundingRect();
 	for (auto& a: x)
@@ -85,23 +84,25 @@ ImageItem::constrainRubberBand()
 		else if (b > r.bottom())
 			b = r.bottom();
 
-	auto d = (x[1]-x[0]) - (y[1]-y[0]) * ratio;
-	if (d > 0.0) {
-		if (xi == 1)
-			x[xi] -= d;
-		else
-			x[xi] += d;
-	} else if (d < 0.0) {
-		if (yj == 1)
-			y[yj] += d/ratio;
-		else
-			y[yj] -= d/ratio;
+	if (ratio > 0) {
+		auto d = (x[1]-x[0]) - (y[1]-y[0]) * ratio;
+		if (d > 0.0) {
+			if (xi == 1)
+				x[xi] -= d;
+			else
+				x[xi] += d;
+		} else if (d < 0.0) {
+			if (yj == 1)
+				y[yj] += d/ratio;
+			else
+				y[yj] -= d/ratio;
+		}
 	}
-	adjustRubberBand();
+	setRubberBand();
 }
 
 void
-ImageItem::adjustRubberBand()
+ImageItem::setRubberBand()
 {
 	auto p = view->mapFromScene(x[0], y[0], x[1]-x[0], y[1]-y[0]);
 
@@ -123,7 +124,7 @@ ImageItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 		y[yj] = event->scenePos().y();
 	}
 
-	constrainRubberBand();
+	adjustRubberBand();
 }
 
 void 
@@ -146,5 +147,5 @@ ImageItem::paint(QPainter* p, const QStyleOptionGraphicsItem* i, QWidget* w)
 {
 	QGraphicsPixmapItem::paint(p, i, w);
 	if (rubberBand)
-		adjustRubberBand();
+		setRubberBand();
 }

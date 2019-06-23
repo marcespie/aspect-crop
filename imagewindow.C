@@ -28,7 +28,7 @@ ImageWindow::ImageWindow()
 	i = 0;
 	names = nullptr;
 
-	ratio = 1.0;
+	ratio = -1.0;
 	scaleFactor = 0.5;
 	setCentralWidget(view);
 	resize(QGuiApplication::primaryScreen()->availableSize() * 0.9);

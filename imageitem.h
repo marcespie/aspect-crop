@@ -43,8 +43,8 @@ private:
 	int xi, yj;
 	bool moving;
 	double ratio;
-	void constrainRubberBand();
 	void adjustRubberBand();
+	void setRubberBand();
 };
 
 #endif

@@ -31,18 +31,16 @@ main(int argc, char *argv[])
 			*k = 0;
 			auto r1 = atoi(argv[1]);
 			auto r2 = atoi(k+1);
-			if (r1 == 0 || r2 == 0) {
-				std::cerr << "Couldn't parse aspect ratio\n";
-				exit(1);
+			if (r1 > 0 && r2 > 0) {
+				argc--;
+				argv++;
+				i.setRatio(r1, r2);
 			}
-			argc--;
-			argv++;
-			i.setRatio(r1, r2);
 		}
 	}
 
 	if (argc < 2) {
-		std::cerr << "Usage: aspect-crop [ratio] picture...\n";
+		std::cerr << "Usage: aspect-crop [a:b] picture...\n";
 		exit(1);
 	}
 
