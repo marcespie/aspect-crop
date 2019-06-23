@@ -24,7 +24,7 @@ class QGraphicsView;
 class ImageItem: public QGraphicsPixmapItem
 {
 public:
-	ImageItem(QPixmap&, QGraphicsView*, const char*);
+	ImageItem(QPixmap&, QGraphicsView*, const char*, double);
 	void doTell() const;
 	~ImageItem();
 protected:

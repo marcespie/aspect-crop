@@ -30,6 +30,7 @@ class ImageWindow: public QMainWindow
 public:
 	ImageWindow();
 	void setCarousel(int, char**);
+	void setRatio(int, int);
 	bool nextPicture();
 private slots:
 	void zoomIn();

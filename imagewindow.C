@@ -28,12 +28,19 @@ ImageWindow::ImageWindow()
 	i = 0;
 	names = nullptr;
 
+	ratio = 1.0;
 	scaleFactor = 0.5;
 	setCentralWidget(view);
 	resize(QGuiApplication::primaryScreen()->availableSize() * 0.9);
 	view->setVisible(true);
 	rescaleView();
 	createActions();
+}
+
+void
+ImageWindow::setRatio(int a, int b)
+{
+	ratio = double(a) / double(b);
 }
 
 void
@@ -79,7 +86,7 @@ ImageWindow::setImage(const QImage& i, const char* title)
 		scene->removeItem(image);
 		delete(image);
 	}
-	image = new ImageItem(p, view, title);
+	image = new ImageItem(p, view, title, ratio);
 	scene->addItem(image);
 }
 

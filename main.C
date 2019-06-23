@@ -25,10 +25,28 @@ main(int argc, char *argv[])
 
 	ImageWindow i;
 
+	if (argc >= 2) {
+		auto k = strchr(argv[1], ':');
+		if (k != nullptr) {
+			*k = 0;
+			auto r1 = atoi(argv[1]);
+			auto r2 = atoi(k+1);
+			if (r1 == 0 || r2 == 0) {
+				std::cerr << "Couldn't parse aspect ratio\n";
+				exit(1);
+			}
+			argc--;
+			argv++;
+			i.setRatio(r1, r2);
+		}
+	}
+
 	if (argc < 2) {
-		std::cerr << "Usage: aspect-crop picture...\n";
+		std::cerr << "Usage: aspect-crop [ratio] picture...\n";
 		exit(1);
 	}
+
+
 	i.setCarousel(argc-1, argv+1);
 	if (i.nextPicture()) {
 		i.show();

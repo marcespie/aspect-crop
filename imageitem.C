@@ -22,11 +22,10 @@
 #include <cmath>
 #include "imageitem.h"
 
-ImageItem::ImageItem(QPixmap& p, QGraphicsView* parent, const char* s): 
+ImageItem::ImageItem(QPixmap& p, QGraphicsView* parent, const char* s, double r): 
 	QGraphicsPixmapItem(p), rubberBand(nullptr), view(parent),
-	title(s)
+	title(s), ratio(r)
 {
-	ratio = 9.0/16.0;
 }
 
 ImageItem::~ImageItem()
