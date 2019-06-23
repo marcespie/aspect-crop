@@ -29,6 +29,7 @@ public:
 	~ImageItem();
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*)
 	 override;
+	using C = double;
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
@@ -37,7 +38,7 @@ private:
 	QRubberBand *rubberBand;
 	QGraphicsView *view;
 	const char* title;
-	int x[2], y[2];
+	C x[2], y[2];
 	int xi, yj;
 	double ratio;
 	void adjustRubberBand(QGraphicsSceneMouseEvent *);

@@ -40,10 +40,10 @@ inline T absdiff(T a, T b)
 	return a < b ? b - a : a - b;
 }
 
-inline std::pair<int, int> getpos(QWidget *window, 
-    const QGraphicsSceneMouseEvent *event)
+inline std::pair<ImageItem::C, ImageItem::C> 
+getpos(const QGraphicsSceneMouseEvent* event)
 {
-	auto p = window->mapFromGlobal(event->screenPos());
+	auto p = event->scenePos();
 	return std::pair(p.x(), p.y());
 }
 
@@ -55,9 +55,9 @@ ImageItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		rubberBand->setWindowOpacity(0.5);
 		xi = 1;
 		yj = 1;
-		std::tie(x[0], y[0]) = getpos(view, event);
+		std::tie(x[0], y[0]) = getpos(event);
 	} else {
-		auto [a, b] = getpos(view, event);
+		auto [a, b] = getpos(event);
 		if (absdiff(x[0], a) < absdiff(x[1], a))
 			xi = 0;
 		else 
@@ -74,7 +74,7 @@ ImageItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void
 ImageItem::adjustRubberBand(QGraphicsSceneMouseEvent *event)
 {
-	std::tie( x[xi], y[yj]) = getpos(view, event);
+	std::tie(x[xi], y[yj]) = getpos(event);
 
 	auto d = (x[1]-x[0]) - (y[1]-y[0]) * ratio;
 	if (d > 0.0) {
@@ -89,7 +89,9 @@ ImageItem::adjustRubberBand(QGraphicsSceneMouseEvent *event)
 			y[yj] -= d/ratio;
 	}
 
-	rubberBand->setGeometry(x[0], y[0], x[1]-x[0], y[1]-y[0]);
+	auto p = view->mapFromScene(x[0], y[0], x[1]-x[0], y[1]-y[0]);
+
+	rubberBand->setGeometry(p.boundingRect());
 }
 
 void 
@@ -101,20 +103,16 @@ ImageItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void 
 ImageItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+	adjustRubberBand(event);
 }
 
 void 
 ImageItem::doTell() const
 {
-	auto a = view->mapToScene(x[0], y[0]);
-	auto b = view->mapToScene(x[1], y[1]);
-	auto x0 = a.x();
-	auto y0 = a.y();
-	auto x1 = b.x();
-	auto y1 = b.y();
-
-	std::cout << "--trim " <<round(x1-x0) << "x" << round(y1-y0) << 
-	    "+" << round(x0) << "+" << round(y0) <<" --focus " << title << "\n";
+	std::cout << 
+	    "--trim " <<round(x[1]-x[0]) << "x" << round(y[1]-y[0]) << 
+	    "+" << round(x[0]) << "+" << round(y[0]) <<
+	    " --focus " << title << "\n";
 }
 
 
@@ -122,4 +120,9 @@ void
 ImageItem::paint(QPainter* p, const QStyleOptionGraphicsItem* i, QWidget* w)
 {
 	QGraphicsPixmapItem::paint(p, i, w);
+	if (rubberBand) {
+		auto p = view->mapFromScene(x[0], y[0], x[1]-x[0], y[1]-y[0]);
+
+		rubberBand->setGeometry(p.boundingRect());
+	}
 }
