@@ -116,3 +116,10 @@ ImageItem::doTell() const
 	std::cout << "--trim " <<round(x1-x0) << "x" << round(y1-y0) << 
 	    "+" << round(x0) << "+" << round(y0) <<" --focus " << title << "\n";
 }
+
+
+void 
+ImageItem::paint(QPainter* p, const QStyleOptionGraphicsItem* i, QWidget* w)
+{
+	QGraphicsPixmapItem::paint(p, i, w);
+}

@@ -27,6 +27,8 @@ public:
 	ImageItem(QPixmap&, QGraphicsView*, const char*, double);
 	void doTell() const;
 	~ImageItem();
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*)
+	 override;
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
