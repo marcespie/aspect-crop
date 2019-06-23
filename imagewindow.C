@@ -114,7 +114,7 @@ ImageWindow::rescaleView()
 }
 
 void
-ImageWindow::goNext()
+ImageWindow::printNext()
 {
 	if (image)
 		image->doTell();
@@ -122,19 +122,45 @@ ImageWindow::goNext()
 		exit(0);
 }
 
+void
+ImageWindow::print()
+{
+	if (image)
+		image->doTell();
+}
+
+void
+ImageWindow::noprintNext()
+{
+	if (!nextPicture())
+		exit(0);
+}
+
 void 
 ImageWindow::createActions()
 {
-	auto zi = new QAction(this);
-	zi->setShortcut(QKeySequence("+"));
-	connect(zi, SIGNAL(triggered()), this, SLOT(zoomIn()));
-	this->addAction(zi);
-	auto zo = new QAction(this);
-	zo->setShortcut(QKeySequence("-"));
-	connect(zo, SIGNAL(triggered()), this, SLOT(zoomOut()));
-	this->addAction(zo);
-	auto zn = new QAction(this);
-	zn->setShortcut(QKeySequence("n"));
-	connect(zn, SIGNAL(triggered()), this, SLOT(goNext()));
-	this->addAction(zn);
+	auto z = new QAction(this);
+	z->setShortcut(QKeySequence("+"));
+	connect(z, SIGNAL(triggered()), this, SLOT(zoomIn()));
+	this->addAction(z);
+
+	z = new QAction(this);
+	z->setShortcut(QKeySequence("-"));
+	connect(z, SIGNAL(triggered()), this, SLOT(zoomOut()));
+	this->addAction(z);
+
+	z = new QAction(this);
+	z->setShortcut(QKeySequence("n"));
+	connect(z, SIGNAL(triggered()), this, SLOT(printNext()));
+	this->addAction(z);
+
+	z = new QAction(this);
+	z->setShortcut(QKeySequence("s"));
+	connect(z, SIGNAL(triggered()), this, SLOT(noprintNext()));
+	this->addAction(z);
+
+	z = new QAction(this);
+	z->setShortcut(QKeySequence("p"));
+	connect(z, SIGNAL(triggered()), this, SLOT(print()));
+	this->addAction(z);
 }

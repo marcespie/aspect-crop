@@ -27,7 +27,7 @@ class ImageItem: public QGraphicsPixmapItem
 {
 public:
 	ImageItem(QPixmap&, QGraphicsView*, const char*, double);
-	void doTell() const;
+	void doTell();
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*)
 	    override;
 	using C = double;
@@ -43,7 +43,7 @@ private:
 	int xi, yj;
 	bool moving;
 	double ratio;
-	void adjustRubberBand();
+	void adjustRubberBand(double =0.1);
 	void setRubberBand();
 };
 

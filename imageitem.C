@@ -55,10 +55,10 @@ ImageItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 			yj = 0;
 		else 
 			yj = 1;
-		// if both coordinates are "in the middle" we switch to moving
+		// if either coordinate is "in the middle" we switch to moving
 		// the rectangle
 		moving = absdiff(x[xi], a) > absdiff((x[0]+x[1])/2, a)
-		    && absdiff(y[yj], b) > absdiff((y[0]+y[1])/2, b);
+		    || absdiff(y[yj], b) > absdiff((y[0]+y[1])/2, b);
 	}
 	if (!moving) {
 		x[xi] = a;
@@ -69,20 +69,22 @@ ImageItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 }
 
 void
-ImageItem::adjustRubberBand()
+ImageItem::adjustRubberBand(double coeff)
 {
 	auto r = sceneBoundingRect();
+	auto xmargin = absdiff(x[0], x[1])* coeff;
 	for (auto& a: x)
-		if (a < r.left())
-			a = r.left();
-		else if (a > r.right())
-			a = r.right();
+		if (a < r.left()-xmargin)
+			a = r.left()-xmargin;
+		else if (a > r.right()+xmargin)
+			a = r.right()+xmargin;
 
+	auto ymargin = absdiff(y[0], y[1]) * coeff;
 	for (auto& b: y)
-		if (b < r.top())
-			b = r.top();
-		else if (b > r.bottom())
-			b = r.bottom();
+		if (b < r.top()-ymargin)
+			b = r.top()-ymargin;
+		else if (b > r.bottom()+ymargin)
+			b = r.bottom()+ymargin;
 
 	if (ratio > 0) {
 		auto d = (x[1]-x[0]) - (y[1]-y[0]) * ratio;
@@ -134,8 +136,9 @@ ImageItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 }
 
 void 
-ImageItem::doTell() const
+ImageItem::doTell()
 {
+	adjustRubberBand(0.0);
 	std::cout << 
 	    "--trim " <<round(x[1]-x[0]) << "x" << round(y[1]-y[0]) << 
 	    "+" << round(x[0]) << "+" << round(y[0]) <<

@@ -35,7 +35,9 @@ public:
 private slots:
 	void zoomIn();
 	void zoomOut();
-	void goNext();
+	void printNext();
+	void noprintNext();
+	void print();
 private:
 	QGraphicsScene *scene;
 	QGraphicsView *view;
