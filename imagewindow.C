@@ -28,7 +28,7 @@ ImageWindow::ImageWindow()
 	i = 0;
 	names = nullptr;
 
-	scaleFactor = 0.3;
+	scaleFactor = 0.5;
 	setCentralWidget(view);
 	resize(QGuiApplication::primaryScreen()->availableSize() * 0.9);
 	view->setVisible(true);
@@ -48,7 +48,6 @@ bool
 ImageWindow::nextPicture()
 {
 	for (; i != n; i++) {
-		std::cerr << "Considering " << names[i] << "\n";
 		if (loadPicture(names[i])) {
 			i++;
 			return true;
@@ -130,5 +129,6 @@ ImageWindow::createActions()
 	auto zn = new QAction(this);
 	zn->setShortcut(QKeySequence("n"));
 	connect(zn, SIGNAL(triggered()), this, SLOT(goNext()));
+	this->addAction(zn);
 
 }

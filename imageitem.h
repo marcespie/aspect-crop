@@ -26,6 +26,7 @@ class ImageItem: public QGraphicsPixmapItem
 public:
 	ImageItem(QPixmap&, QGraphicsView*, const char*);
 	void doTell() const;
+	~ImageItem();
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;

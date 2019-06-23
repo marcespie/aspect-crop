@@ -29,6 +29,12 @@ ImageItem::ImageItem(QPixmap& p, QGraphicsView* parent, const char* s):
 	ratio = 9.0/16.0;
 }
 
+ImageItem::~ImageItem()
+{
+	if (rubberBand)
+		delete rubberBand;
+}
+
 template<typename T>
 inline T absdiff(T a, T b)
 {
