@@ -1,0 +1,56 @@
+.\" Copyright (c) 2019 Marc Espie <espie@openbsd.org>
+.\"
+.\" Permission to use, copy, modify, and distribute this software for any
+.\" purpose with or without fee is hereby granted, provided that the above
+.\" copyright notice and this permission notice appear in all copies.
+.\"
+.\" THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+.\" WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+.\" MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+.\" ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+.\" WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+.\" ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+.\" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+.\"
+.Dd $Mdocdate$
+.Dt ASPECT-CROP 1
+.Os
+.Sh NAME
+.Nm aspect-crop
+.Nd find proper trim rectangles for xwallpaper
+.Sh SYNOPSIS
+.Nm
+.Op Ar a Ns : Ns Ar b
+.Ar file ...
+.Sh DESCRIPTION
+.Nm
+is an interactive tool for computing trim rectangles for
+.Xr xwallpaper 1 .
+.Pp
+Parameters are an optional aspect ratio
+.Ar a Ns : Ns Ar b ,
+followed by picture
+.Ar file
+name(s).
+.Pp
+.Nm
+will display the first picture, and allow the user to select a rectangle
+from that picture (optionally constrained by the given aspect-ratio).
+.Pp
+.Nm
+reacts to the following key-presses:
+.Pp
+.Bl -tag -offset indent -width 4 -compact
+.It Cm n
+Display the trim parameters and go to the next picture,
+.It Cm +
+Zoom in,
+.It Cm -
+Zoom out.
+.El
+.Pp
+.Sh AUTHORS
+The
+.Nm
+utility was written by
+.An Marc Espie Aq Mt espie@openbsd.org .
