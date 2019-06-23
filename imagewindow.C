@@ -24,13 +24,38 @@ ImageWindow::ImageWindow()
 	view = new QGraphicsView;
 	view->setScene(scene);
 	image = nullptr;
+	n = 0;
+	i = 0;
+	names = nullptr;
 
 	scaleFactor = 0.3;
-	view->setVisible(true);
 	setCentralWidget(view);
 	resize(QGuiApplication::primaryScreen()->availableSize() * 0.9);
-	rescaleImage();
+	view->setVisible(true);
+	rescaleView();
 	createActions();
+}
+
+void
+ImageWindow::setCarousel(int argc, char **argv)
+{
+	n = argc;
+	i = 0;
+	names = argv;
+}
+
+bool
+ImageWindow::nextPicture()
+{
+	for (; i != n; i++) {
+		std::cerr << "Considering " << names[i] << "\n";
+		if (loadPicture(names[i])) {
+			i++;
+			return true;
+		}
+		std::cerr << "Couldn't load " << names[i] << "\n";
+	}
+	return false;
 }
 
 bool 
@@ -63,19 +88,19 @@ void
 ImageWindow::zoomIn()
 {
 	scaleFactor *= 1.2;
-	rescaleImage();
+	rescaleView();
 }
 
 void 
 ImageWindow::zoomOut()
 {
 	scaleFactor /= 1.2;
-	rescaleImage();
+	rescaleView();
 }
 
 
 void 
-ImageWindow::rescaleImage()
+ImageWindow::rescaleView()
 {
 	QMatrix matrix;
 	matrix.scale(scaleFactor, scaleFactor);
@@ -94,4 +119,3 @@ ImageWindow::createActions()
 	connect(zo, SIGNAL(triggered()), this, SLOT(zoomOut()));
 	this->addAction(zo);
 }
-

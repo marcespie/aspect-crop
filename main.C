@@ -29,12 +29,10 @@ main(int argc, char *argv[])
 		std::cerr << "Usage: aspect-crop picture...\n";
 		exit(1);
 	}
-
-	if (i.loadPicture(argv[1])) {
+	i.setCarousel(argc-1, argv+1);
+	if (i.nextPicture()) {
 		i.show();
 		return app.exec();
-	} else {
-		std::cerr << "Can't load picture " << argv[1] << "\n";
-		exit(1);
 	}
+	exit(1);
 }

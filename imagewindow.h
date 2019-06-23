@@ -29,7 +29,8 @@ class ImageWindow: public QMainWindow
 	Q_OBJECT
 public:
 	ImageWindow();
-	bool loadPicture(const char*);
+	void setCarousel(int, char**);
+	bool nextPicture();
 private slots:
 	void zoomIn();
 	void zoomOut();
@@ -40,8 +41,12 @@ private:
 	double scaleFactor;
 	double ratio;
 	void setImage(const QImage&, const char*);
-	void rescaleImage();
+	void rescaleView();
 	void createActions();
+	bool loadPicture(const char*);
+	int n;
+	int i;
+	char **names;
 };
 
 #endif
