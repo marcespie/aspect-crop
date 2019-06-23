@@ -96,6 +96,11 @@ ImageItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void 
 ImageItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+}
+
+void 
+ImageItem::doTell() const
+{
 	auto a = view->mapToScene(x[0], y[0]);
 	auto b = view->mapToScene(x[1], y[1]);
 	auto x0 = a.x();

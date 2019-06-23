@@ -107,15 +107,28 @@ ImageWindow::rescaleView()
 	view->setMatrix(matrix);
 }
 
+void
+ImageWindow::goNext()
+{
+	if (image)
+		image->doTell();
+	if (!nextPicture())
+		exit(0);
+}
+
 void 
 ImageWindow::createActions()
 {
-	QAction *zi = new QAction(this);
+	auto zi = new QAction(this);
 	zi->setShortcut(QKeySequence("+"));
 	connect(zi, SIGNAL(triggered()), this, SLOT(zoomIn()));
 	this->addAction(zi);
-	QAction *zo = new QAction(this);
+	auto zo = new QAction(this);
 	zo->setShortcut(QKeySequence("-"));
 	connect(zo, SIGNAL(triggered()), this, SLOT(zoomOut()));
 	this->addAction(zo);
+	auto zn = new QAction(this);
+	zn->setShortcut(QKeySequence("n"));
+	connect(zn, SIGNAL(triggered()), this, SLOT(goNext()));
+
 }
