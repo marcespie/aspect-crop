@@ -41,6 +41,7 @@ private:
 	const char* title;
 	C x[2], y[2];
 	int xi, yj;
+	bool moving;
 	double ratio;
 	void constrainRubberBand(QGraphicsSceneMouseEvent *);
 	void adjustRubberBand();

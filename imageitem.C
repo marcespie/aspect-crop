@@ -38,11 +38,12 @@ ImageItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
 	if (!rubberBand) {
 		rubberBand = std::make_unique<QRubberBand>(QRubberBand::Rectangle, view);
-		rubberBand->setWindowOpacity(0.5);
+		rubberBand->setWindowOpacity(0.1);
 		xi = 1;
 		yj = 1;
 		x[0] = event->scenePos().x();
 		y[0] = event->scenePos().y();
+		moving = false;
 	} else {
 		auto a = event->scenePos().x();
 		auto b = event->scenePos().y();
@@ -54,8 +55,13 @@ ImageItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 			yj = 0;
 		else 
 			yj = 1;
+		// if both coordinates are "in the middle" we switch to moving
+		// the rectangle
+		moving = absdiff(x[xi], a) > absdiff((x[0]+x[1])/2, a)
+		    && absdiff(y[yj], b) > absdiff((y[0]+y[1])/2, b);
 	}
-	constrainRubberBand(event);
+	if (!moving)
+		constrainRubberBand(event);
 	rubberBand->show();
 }
 
@@ -92,13 +98,22 @@ ImageItem::adjustRubberBand()
 void 
 ImageItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-	constrainRubberBand(event);
+	if (moving) {
+		auto deltax = event->scenePos().x() - event->lastScenePos().x();
+		auto deltay = event->scenePos().y() - event->lastScenePos().y();
+		x[0] += deltax;
+		x[1] += deltax;
+		y[0] += deltay;
+		y[1] += deltay;
+		adjustRubberBand();
+	} else 
+		constrainRubberBand(event);
 }
 
 void 
 ImageItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-	constrainRubberBand(event);
+	mouseMoveEvent(event);
 }
 
 void 
