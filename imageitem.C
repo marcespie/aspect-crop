@@ -18,20 +18,13 @@
 #include <QRubberBand>
 #include <QGraphicsView>
 #include <iostream>
-#include <tuple>
 #include <cmath>
 #include "imageitem.h"
 
 ImageItem::ImageItem(QPixmap& p, QGraphicsView* parent, const char* s, double r): 
-	QGraphicsPixmapItem(p), rubberBand(nullptr), view(parent),
+	QGraphicsPixmapItem{p}, rubberBand{nullptr}, view{parent},
 	title(s), ratio(r)
 {
-}
-
-ImageItem::~ImageItem()
-{
-	if (rubberBand)
-		delete rubberBand;
 }
 
 template<typename T>
@@ -44,7 +37,7 @@ void
 ImageItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
 	if (!rubberBand) {
-		rubberBand = new QRubberBand(QRubberBand::Rectangle, view);
+		rubberBand = std::make_unique<QRubberBand>(QRubberBand::Rectangle, view);
 		rubberBand->setWindowOpacity(0.5);
 		xi = 1;
 		yj = 1;

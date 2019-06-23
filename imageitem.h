@@ -18,6 +18,8 @@
 
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
+#include <memory>
+
 class QRubberBand;
 class QGraphicsView;
 
@@ -26,7 +28,6 @@ class ImageItem: public QGraphicsPixmapItem
 public:
 	ImageItem(QPixmap&, QGraphicsView*, const char*, double);
 	void doTell() const;
-	~ImageItem();
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*)
 	 override;
 	using C = double;
@@ -35,8 +36,8 @@ protected:
 	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 private:
-	QRubberBand *rubberBand;
-	QGraphicsView *view;
+	std::unique_ptr<QRubberBand> rubberBand;
+	QGraphicsView* view;
 	const char* title;
 	C x[2], y[2];
 	int xi, yj;
