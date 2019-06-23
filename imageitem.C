@@ -145,6 +145,12 @@ ImageItem::doTell()
 	    " --focus " << title << "\n";
 }
 
+void
+ImageItem::adjustNow()
+{
+	adjustRubberBand(0.0);
+}
+
 void 
 ImageItem::paint(QPainter* p, const QStyleOptionGraphicsItem* i, QWidget* w)
 {

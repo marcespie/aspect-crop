@@ -28,6 +28,7 @@ class ImageItem: public QGraphicsPixmapItem
 public:
 	ImageItem(QPixmap&, QGraphicsView*, const char*, double);
 	void doTell();
+	void adjustNow();
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*)
 	    override;
 	using C = double;

@@ -38,6 +38,7 @@ private slots:
 	void printNext();
 	void noprintNext();
 	void print();
+	void forceCrop();
 private:
 	QGraphicsScene *scene;
 	QGraphicsView *view;

@@ -136,6 +136,13 @@ ImageWindow::noprintNext()
 		exit(0);
 }
 
+void
+ImageWindow::forceCrop()
+{
+	if (image)
+		image->adjustNow();
+}
+
 void 
 ImageWindow::createActions()
 {
@@ -162,5 +169,10 @@ ImageWindow::createActions()
 	z = new QAction(this);
 	z->setShortcut(QKeySequence("p"));
 	connect(z, SIGNAL(triggered()), this, SLOT(print()));
+	this->addAction(z);
+
+	z = new QAction(this);
+	z->setShortcut(QKeySequence("f"));
+	connect(z, SIGNAL(triggered()), this, SLOT(forceCrop()));
 	this->addAction(z);
 }
