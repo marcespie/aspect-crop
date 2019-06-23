@@ -125,7 +125,6 @@ ImageItem::doTell() const
 	    " --focus " << title << "\n";
 }
 
-
 void 
 ImageItem::paint(QPainter* p, const QStyleOptionGraphicsItem* i, QWidget* w)
 {

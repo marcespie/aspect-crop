@@ -29,7 +29,7 @@ public:
 	ImageItem(QPixmap&, QGraphicsView*, const char*, double);
 	void doTell() const;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*)
-	 override;
+	    override;
 	using C = double;
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
