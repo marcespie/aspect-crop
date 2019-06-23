@@ -38,7 +38,6 @@ ImageItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
 	if (!rubberBand) {
 		rubberBand = std::make_unique<QRubberBand>(QRubberBand::Rectangle, view);
-		rubberBand->setWindowOpacity(0.1);
 		xi = 1;
 		yj = 1;
 		x[0] = event->scenePos().x();
