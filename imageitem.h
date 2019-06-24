@@ -29,6 +29,7 @@ public:
 	ImageItem(QPixmap&, QGraphicsView*, const char*, double);
 	void doTell();
 	void adjustNow();
+	void testTrim();
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*)
 	    override;
 	using C = double;

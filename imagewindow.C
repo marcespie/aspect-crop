@@ -143,6 +143,13 @@ ImageWindow::forceCrop()
 		image->adjustNow();
 }
 
+void
+ImageWindow::testTrim()
+{
+	if (image)
+		image->testTrim();
+}
+
 void 
 ImageWindow::createActions()
 {
@@ -174,5 +181,10 @@ ImageWindow::createActions()
 	z = new QAction(this);
 	z->setShortcut(QKeySequence("f"));
 	connect(z, SIGNAL(triggered()), this, SLOT(forceCrop()));
+	this->addAction(z);
+
+	z = new QAction(this);
+	z->setShortcut(QKeySequence("t"));
+	connect(z, SIGNAL(triggered()), this, SLOT(testTrim()));
 	this->addAction(z);
 }

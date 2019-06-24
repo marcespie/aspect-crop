@@ -18,8 +18,12 @@
 #include <QRubberBand>
 #include <QGraphicsView>
 #include <iostream>
+#include <sstream>
 #include <cmath>
+#include <unistd.h>
 #include "imageitem.h"
+#include "system.h"
+
 
 ImageItem::ImageItem(QPixmap& p, QGraphicsView* v, const char* s, double r): 
     QGraphicsPixmapItem{p}, rubberBand{nullptr}, view{v}, title{s}, ratio{r}
@@ -143,6 +147,25 @@ ImageItem::doTell()
 	    "--trim " <<round(x[1]-x[0]) << "x" << round(y[1]-y[0]) << 
 	    "+" << round(x[0]) << "+" << round(y[0]) <<
 	    " --focus " << title << "\n";
+}
+
+void
+ImageItem::testTrim()
+{
+
+	int pid = fork();
+	if (pid == -1)
+		system_error("fork");
+	if (pid == 0) {
+		std::ostringstream s;
+		s << round(x[1]-x[0]) << "x" << round(y[1]-y[0]) << 
+			    "+" << round(x[0]) << "+" << round(y[0]);
+		execlp("xwallpaper",
+			"xwallpaper", "--trim",
+			s.str().c_str(), "--focus", title, nullptr);
+		system_error("execve");
+	}
+	deal_with_child(pid);
 }
 
 void
