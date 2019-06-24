@@ -152,7 +152,7 @@ ImageItem::doTell()
 void
 ImageItem::testTrim()
 {
-
+	adjustRubberBand(0.0);
 	int pid = fork();
 	if (pid == -1)
 		system_error("fork");
@@ -160,6 +160,7 @@ ImageItem::testTrim()
 		std::ostringstream s;
 		s << round(x[1]-x[0]) << "x" << round(y[1]-y[0]) << 
 			    "+" << round(x[0]) << "+" << round(y[0]);
+		std::cout << s.str() << "\n";
 		execlp("xwallpaper",
 			"xwallpaper", "--trim",
 			s.str().c_str(), "--focus", title, nullptr);
