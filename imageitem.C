@@ -139,28 +139,32 @@ ImageItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 	mouseMoveEvent(event);
 }
 
+void
+ImageItem::printGeometry(std::ostream& o)
+{
+	adjustRubberBand(0.0);
+	o << round(x[1]-x[0]) << "x" << round(y[1]-y[0]) << 
+		    "+" << round(x[0]) << "+" << round(y[0]);
+}
+
 void 
 ImageItem::doTell()
 {
-	adjustRubberBand(0.0);
-	std::cout << 
-	    "--trim " <<round(x[1]-x[0]) << "x" << round(y[1]-y[0]) << 
-	    "+" << round(x[0]) << "+" << round(y[0]) <<
-	    " --focus " << title << "\n";
+	std::cout << "--trim ";
+	printGeometry(std::cout);
+	std::cout << " --focus " << title << "\n";
 }
 
 void
 ImageItem::testTrim()
 {
-	adjustRubberBand(0.0);
 	int pid = fork();
 	if (pid == -1)
 		system_error("fork");
 	if (pid == 0) {
 		std::ostringstream s;
-		s << round(x[1]-x[0]) << "x" << round(y[1]-y[0]) << 
-			    "+" << round(x[0]) << "+" << round(y[0]);
-		std::cout << s.str() << "\n";
+		printGeometry(s);
+		std::cout << s.str() << " on " << title << "\n";
 		execlp("xwallpaper",
 			"xwallpaper", "--trim",
 			s.str().c_str(), "--focus", title, nullptr);

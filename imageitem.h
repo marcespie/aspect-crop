@@ -19,6 +19,7 @@
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
 #include <memory>
+#include <iosfwd>
 
 class QRubberBand;
 class QGraphicsView;
@@ -47,6 +48,7 @@ private:
 	double ratio;
 	void adjustRubberBand(double =0.1);
 	void setRubberBand();
+	void printGeometry(std::ostream&);
 };
 
 #endif
