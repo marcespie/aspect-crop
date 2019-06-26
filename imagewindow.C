@@ -14,6 +14,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 #include <QtWidgets>
+#include <QMenuBar>
 #include <iostream>
 #include "imagewindow.h"
 #include "imageitem.h"
@@ -153,38 +154,33 @@ ImageWindow::testTrim()
 void 
 ImageWindow::createActions()
 {
-	auto z = new QAction(this);
+	auto b = menuBar();
+	auto z = b->addAction("&+");
 	z->setShortcut(QKeySequence("+"));
 	connect(z, SIGNAL(triggered()), this, SLOT(zoomIn()));
-	this->addAction(z);
 
-	z = new QAction(this);
+	z = b->addAction("&-");
 	z->setShortcut(QKeySequence("-"));
 	connect(z, SIGNAL(triggered()), this, SLOT(zoomOut()));
-	this->addAction(z);
 
-	z = new QAction(this);
-	z->setShortcut(QKeySequence("n"));
-	connect(z, SIGNAL(triggered()), this, SLOT(printNext()));
-	this->addAction(z);
-
-	z = new QAction(this);
-	z->setShortcut(QKeySequence("s"));
-	connect(z, SIGNAL(triggered()), this, SLOT(noprintNext()));
-	this->addAction(z);
-
-	z = new QAction(this);
-	z->setShortcut(QKeySequence("p"));
-	connect(z, SIGNAL(triggered()), this, SLOT(print()));
-	this->addAction(z);
-
-	z = new QAction(this);
-	z->setShortcut(QKeySequence("f"));
-	connect(z, SIGNAL(triggered()), this, SLOT(forceCrop()));
-	this->addAction(z);
-
-	z = new QAction(this);
+	z = b->addAction("&Test");
 	z->setShortcut(QKeySequence("t"));
 	connect(z, SIGNAL(triggered()), this, SLOT(testTrim()));
-	this->addAction(z);
+
+	z = b->addAction("&?");
+	z->setShortcut(QKeySequence("?"));
+	connect(z, SIGNAL(triggered()), this, SLOT(print()));
+
+	z = b->addAction("&Next");
+	z->setShortcut(QKeySequence("n"));
+	connect(z, SIGNAL(triggered()), this, SLOT(printNext()));
+
+	z = b->addAction("&Skip");
+	z->setShortcut(QKeySequence("s"));
+	connect(z, SIGNAL(triggered()), this, SLOT(noprintNext()));
+
+	z = b->addAction("&Force");
+	z->setShortcut(QKeySequence("f"));
+	connect(z, SIGNAL(triggered()), this, SLOT(forceCrop()));
+
 }

@@ -20,6 +20,7 @@
 #include <QGraphicsPixmapItem>
 #include <memory>
 #include <iosfwd>
+#include <string>
 
 class QRubberBand;
 class QGraphicsView;
@@ -49,6 +50,7 @@ private:
 	void adjustRubberBand(double =0.1);
 	void setRubberBand();
 	void printGeometry(std::ostream&);
+	std::string last_tell;
 };
 
 #endif

@@ -150,33 +150,42 @@ ImageItem::printGeometry(std::ostream& o)
 void 
 ImageItem::doTell()
 {
-	std::cout << "--trim ";
-	printGeometry(std::cout);
-	std::cout << " --focus " << title << "\n";
+	if (rubberBand) {
+		std::ostringstream s;
+		printGeometry(s);
+		std::string r = "--trim " + s.str() + " --focus " + title;
+		if (r != last_tell) {
+			std::cout << r << "\n";
+			last_tell = r;
+		}
+	}
 }
 
 void
 ImageItem::testTrim()
 {
-	int pid = fork();
-	if (pid == -1)
-		system_error("fork");
-	if (pid == 0) {
-		std::ostringstream s;
-		printGeometry(s);
-		std::cout << s.str() << " on " << title << "\n";
-		execlp("xwallpaper",
-			"xwallpaper", "--trim",
-			s.str().c_str(), "--focus", title, nullptr);
-		system_error("execve");
+	if (rubberBand) {
+		doTell();
+		int pid = fork();
+		if (pid == -1)
+			system_error("fork");
+		if (pid == 0) {
+			std::ostringstream s;
+			printGeometry(s);
+			execlp("xwallpaper",
+				"xwallpaper", "--trim",
+				s.str().c_str(), "--focus", title, nullptr);
+			system_error("execve");
+		}
+		deal_with_child(pid);
 	}
-	deal_with_child(pid);
 }
 
 void
 ImageItem::adjustNow()
 {
-	adjustRubberBand(0.0);
+	if (rubberBand)
+		adjustRubberBand(0.0);
 }
 
 void 
