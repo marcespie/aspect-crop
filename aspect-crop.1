@@ -50,12 +50,20 @@ Display the trim parameters and go to the next picture,
 Display the trim parameters,
 .It Cm s
 Go to the next pciture,
+.It Cm t
+Test the current trim box, passing it to
+.Xr xwallpaper 1 ,
+and print it.
 .It Cm +
 Zoom in,
 .It Cm -
 Zoom out.
 .El
 .Pp
+Note that
+.Nm 
+will display a given set of trim parameters just once, so if you test the
+box, and go to the next picture, you won't get a dual display.
 .Sh AUTHORS
 The
 .Nm

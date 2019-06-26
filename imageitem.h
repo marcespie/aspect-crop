@@ -47,7 +47,7 @@ private:
 	int xi, yj;
 	bool moving;
 	double ratio;
-	void adjustRubberBand(double =0.1);
+	void adjustRubberBand(double =0.2);
 	void setRubberBand();
 	void printGeometry(std::ostream&);
 	std::string last_tell;
