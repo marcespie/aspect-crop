@@ -75,6 +75,8 @@ ImageWindow::loadPicture(const char* filename)
 		return false;
 	else {
 		setImage(i, filename);
+		if (!constrained)
+			toggleConstrained();
 		return true;
 	}
 }
@@ -87,7 +89,7 @@ ImageWindow::setImage(const QImage& i, const char* title)
 		scene->removeItem(image);
 		delete(image);
 	}
-	image = new ImageItem(p, view, title, ratio);
+	image = new ImageItem(p, view, title, ratio, constrained);
 	setWindowFilePath(title);
 	scene->addItem(image);
 }
@@ -152,6 +154,16 @@ ImageWindow::testTrim()
 		image->testTrim();
 }
 
+void
+ImageWindow::toggleConstrained()
+{
+	constrained = !constrained;
+	if (constrained)
+		c->setText("Un&Constrain");
+	else
+		c->setText("&Constrain");
+}
+
 void 
 ImageWindow::createActions()
 {
@@ -184,4 +196,7 @@ ImageWindow::createActions()
 	z->setShortcut(QKeySequence("f"));
 	connect(z, SIGNAL(triggered()), this, SLOT(forceCrop()));
 
+	c = b->addAction("Un&Constrain");
+	c->setShortcut(QKeySequence("c"));
+	connect(c, SIGNAL(triggered()), this, SLOT(toggleConstrained()));
 }

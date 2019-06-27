@@ -25,8 +25,10 @@
 #include "system.h"
 
 
-ImageItem::ImageItem(QPixmap& p, QGraphicsView* v, const char* s, double r): 
-    QGraphicsPixmapItem{p}, rubberBand{nullptr}, view{v}, title{s}, ratio{r}
+ImageItem::ImageItem(QPixmap& p, QGraphicsView* v, const char* s, double r,
+    bool& c): 
+    QGraphicsPixmapItem{p}, rubberBand{nullptr}, view{v}, title{s}, ratio{r},
+    constrained{c}
 {
 }
 
@@ -90,7 +92,7 @@ ImageItem::adjustRubberBand(double coeff)
 		else if (b > r.bottom()+ymargin)
 			b = r.bottom()+ymargin;
 
-	if (ratio > 0) {
+	if (ratio > 0 && constrained) {
 		auto d = (x[1]-x[0]) - (y[1]-y[0]) * ratio;
 		if (d > 0.0) {
 			if (xi == 1)

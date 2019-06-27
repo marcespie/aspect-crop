@@ -28,7 +28,7 @@ class QGraphicsView;
 class ImageItem: public QGraphicsPixmapItem
 {
 public:
-	ImageItem(QPixmap&, QGraphicsView*, const char*, double);
+	ImageItem(QPixmap&, QGraphicsView*, const char*, double, bool&);
 	void doTell();
 	void adjustNow();
 	void testTrim();
@@ -47,6 +47,7 @@ private:
 	int xi, yj;
 	bool moving;
 	double ratio;
+	bool& constrained; // XXX
 	void adjustRubberBand(double =0.2);
 	void setRubberBand();
 	void printGeometry(std::ostream&);

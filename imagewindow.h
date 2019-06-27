@@ -40,12 +40,14 @@ private slots:
 	void print();
 	void forceCrop();
 	void testTrim();
+	void toggleConstrained();
 private:
 	QGraphicsScene *scene;
 	QGraphicsView *view;
 	ImageItem *image;
 	double scaleFactor;
 	double ratio;
+	bool constrained;
 	void setImage(const QImage&, const char*);
 	void rescaleView();
 	void createActions();
@@ -53,6 +55,7 @@ private:
 	int n;
 	int i;
 	char **names;
+	QAction* c;
 };
 
 #endif
