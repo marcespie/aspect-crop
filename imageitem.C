@@ -143,9 +143,9 @@ void
 ImageItem::printGeometry(std::ostream& o)
 {
 	adjustRubberBand(0.0);
-	if (x[0] < x[1])
+	if (x[0] > x[1])
 		std::swap(x[0], x[1]);
-	if (y[0] < y[1])
+	if (y[0] > y[1])
 		std::swap(y[0], y[1]);
 	o << round(x[1]-x[0]) << "x" << round(y[1]-y[0]) << 
 		    "+" << round(x[0]) << "+" << round(y[0]);
