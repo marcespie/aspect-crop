@@ -88,6 +88,7 @@ ImageWindow::setImage(const QImage& i, const char* title)
 		delete(image);
 	}
 	image = new ImageItem(p, view, title, ratio);
+	setWindowFilePath(title);
 	scene->addItem(image);
 }
 
