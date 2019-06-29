@@ -69,7 +69,7 @@ bool
 ImageWindow::loadPicture(const char* filename)
 {
 	QImageReader r(filename);
-	r.setAutoTransform(true);
+	//r.setAutoTransform(true);
 	const QImage i = r.read();
 	if (i.isNull())
 		return false;

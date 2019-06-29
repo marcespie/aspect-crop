@@ -26,10 +26,11 @@
 
 
 ImageItem::ImageItem(QPixmap& p, QGraphicsView* v, const char* s, double r,
-    bool& c): 
-    QGraphicsPixmapItem{p}, rubberBand{nullptr}, view{v}, title{s}, ratio{r},
-    constrained{c}
+    bool& cs): 
+    QGraphicsPixmapItem{p}, rubberBand{nullptr}, view{v}, title{s}, 
+    c{r,cs}
 {
+	c.i = this;
 }
 
 template<typename T>
@@ -46,38 +47,57 @@ ImageItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	if (!rubberBand) {
 		rubberBand = 
 		    std::make_unique<QRubberBand>(QRubberBand::Rectangle, view);
-		xi = 1;
-		yj = 1;
-		x[0] = a;
-		y[0] = b;
-		moving = false;
+		c.set(a, b);
 	} else {
-		// find the nearest moving coordinates
-		if (absdiff(x[0], a) < absdiff(x[1], a))
-			xi = 0;
-		else 
-			xi = 1;
-		if (absdiff(y[0], b) < absdiff(y[1], b))
-			yj = 0;
-		else 
-			yj = 1;
-		// if either coordinate is "in the middle" we switch to moving
-		// the rectangle
-		moving = absdiff(x[xi], a) > absdiff((x[0]+x[1])/2, a)
-		    || absdiff(y[yj], b) > absdiff((y[0]+y[1])/2, b);
+		c.find_handle(a, b);
 	}
-	if (!moving) {
-		x[xi] = a;
-		y[yj] = b;
-	}
-	adjustRubberBand();
+	c.set2(a, b);
+	c.adjust();
+	setRubberBand();
 	rubberBand->show();
 }
 
 void
-ImageItem::adjustRubberBand(double coeff)
+coordinates::set(C a, C b)
 {
-	auto r = sceneBoundingRect();
+	xi = 1;
+	yj = 1;
+	x[0] = a;
+	y[0] = b;
+	moving = false;
+}
+
+void
+coordinates::set2(C a, C b)
+{
+	if (!moving) {
+		x[xi] = a;
+		y[yj] = b;
+	}
+}
+
+void
+coordinates::find_handle(C a, C b)
+{
+	// find the nearest moving coordinates
+	if (absdiff(x[0], a) < absdiff(x[1], a))
+		xi = 0;
+	else 
+		xi = 1;
+	if (absdiff(y[0], b) < absdiff(y[1], b))
+		yj = 0;
+	else 
+		yj = 1;
+	// if either coordinate is "in the middle" we switch to moving
+	// the rectangle
+	moving = absdiff(x[xi], a) > absdiff((x[0]+x[1])/2, a)
+	    || absdiff(y[yj], b) > absdiff((y[0]+y[1])/2, b);
+}
+
+void
+coordinates::adjust(double coeff)
+{
+	auto r = i->sceneBoundingRect();
 	auto xmargin = absdiff(x[0], x[1])* coeff;
 	for (auto& a: x)
 		if (a < r.left()-xmargin)
@@ -106,19 +126,10 @@ ImageItem::adjustRubberBand(double coeff)
 				y[yj] -= d/ratio;
 		}
 	}
-	setRubberBand();
 }
 
 void
-ImageItem::setRubberBand()
-{
-	auto p = view->mapFromScene(x[0], y[0], x[1]-x[0], y[1]-y[0]);
-
-	rubberBand->setGeometry(p.boundingRect());
-}
-
-void 
-ImageItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+coordinates::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
 	if (moving) {
 		auto deltax = event->scenePos().x() - event->lastScenePos().x();
@@ -131,8 +142,23 @@ ImageItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 		x[xi] = event->scenePos().x();
 		y[yj] = event->scenePos().y();
 	}
+}
 
-	adjustRubberBand();
+void
+ImageItem::setRubberBand()
+{
+	auto p = view->mapFromScene(c.x[0], c.y[0], c.x[1]-c.x[0], 
+	    c.y[1]-c.y[0]);
+
+	rubberBand->setGeometry(p.boundingRect());
+}
+
+void 
+ImageItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+	c.mouseMoveEvent(event);
+	c.adjust();
+	setRubberBand();
 }
 
 void 
@@ -142,15 +168,22 @@ ImageItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 }
 
 void
-ImageItem::printGeometry(std::ostream& o)
+coordinates::printGeometry(std::ostream& o)
 {
-	adjustRubberBand(0.0);
 	if (x[0] > x[1])
 		std::swap(x[0], x[1]);
 	if (y[0] > y[1])
 		std::swap(y[0], y[1]);
 	o << round(x[1]-x[0]) << "x" << round(y[1]-y[0]) << 
 		    "+" << round(x[0]) << "+" << round(y[0]);
+}
+
+void
+ImageItem::printGeometry(std::ostream& o)
+{
+	coordinates d { c };
+	d.adjust(0.0);
+	d.printGeometry(o);
 }
 
 void 
@@ -190,8 +223,10 @@ ImageItem::testTrim()
 void
 ImageItem::adjustNow()
 {
-	if (rubberBand)
-		adjustRubberBand(0.0);
+	if (rubberBand) {
+		c.adjust(0.0);
+		setRubberBand();
+	}
 }
 
 void 
@@ -200,4 +235,5 @@ ImageItem::paint(QPainter* p, const QStyleOptionGraphicsItem* i, QWidget* w)
 	QGraphicsPixmapItem::paint(p, i, w);
 	if (rubberBand)
 		setRubberBand();
+
 }

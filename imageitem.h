@@ -24,6 +24,34 @@
 
 class QRubberBand;
 class QGraphicsView;
+class ImageItem;
+
+using C = double;
+
+class coordinates
+{
+public:
+	C x[2], y[2];
+	ImageItem* i;
+private:
+	int xi, yj;
+	double ratio;
+	bool& constrained;
+	bool moving;
+
+public:
+	void set(C a, C b);
+	void set2(C a, C b);
+	void find_handle(C a, C b);
+
+	coordinates(double r, bool& c): ratio{r}, constrained{c}
+	{
+	}
+	coordinates(const coordinates&) = default;
+	void adjust(double =0.2);
+	void mouseMoveEvent(QGraphicsSceneMouseEvent*);
+	void printGeometry(std::ostream&);
+};
 
 class ImageItem: public QGraphicsPixmapItem
 {
@@ -34,7 +62,6 @@ public:
 	void testTrim();
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*)
 	    override;
-	using C = double;
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
@@ -43,12 +70,7 @@ private:
 	std::unique_ptr<QRubberBand> rubberBand;
 	QGraphicsView* view;
 	const char* title;
-	C x[2], y[2];
-	int xi, yj;
-	bool moving;
-	double ratio;
-	bool& constrained; // XXX
-	void adjustRubberBand(double =0.2);
+	coordinates c;
 	void setRubberBand();
 	void printGeometry(std::ostream&);
 	std::string last_tell;
