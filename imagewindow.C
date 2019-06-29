@@ -127,13 +127,6 @@ ImageWindow::printNext()
 }
 
 void
-ImageWindow::print()
-{
-	if (image)
-		image->doTell();
-}
-
-void
 ImageWindow::noprintNext()
 {
 	if (!nextPicture())

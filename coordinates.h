@@ -13,41 +13,39 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-#ifndef IMAGEITEM_H
-#define IMAGEITEM_H
+#ifndef COORDINATES_H
+#define COORDINATES_H
 
-#include <QPixmap>
-#include <QGraphicsPixmapItem>
-#include <memory>
 #include <iosfwd>
-#include <string>
-#include "coordinates.h"
+class QGraphicsSceneMouseEvent;
 
-class QRubberBand;
-class QGraphicsView;
+using C = double;
+
 class ImageItem;
 
-class ImageItem: public QGraphicsPixmapItem
+class coordinates
 {
 public:
-	ImageItem(QPixmap&, QGraphicsView*, const char*, double, bool&);
-	void doTell();
-	void adjustNow();
-	void testTrim();
-	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*)
-	    override;
-protected:
-	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
-	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
+	C x[2], y[2];
+	ImageItem* i;
 private:
-	std::unique_ptr<QRubberBand> rubberBand;
-	QGraphicsView* view;
-	const char* title;
-	coordinates c;
-	void setRubberBand();
+	int xi, yj;
+	double ratio;
+	bool& constrained;
+	bool moving;
+
+public:
+	void set(C a, C b);
+	void set2(C a, C b);
+	void find_handle(C a, C b);
+
+	coordinates(double r, bool& c): ratio{r}, constrained{c}
+	{
+	}
+	coordinates(const coordinates&) = default;
+	void adjust(double =0.2);
+	void mouseMoveEvent(QGraphicsSceneMouseEvent*);
 	void printGeometry(std::ostream&);
-	std::string last_tell;
 };
 
 #endif

@@ -37,7 +37,6 @@ private slots:
 	void zoomOut();
 	void printNext();
 	void noprintNext();
-	void print();
 	void forceCrop();
 	void testTrim();
 	void toggleConstrained();
