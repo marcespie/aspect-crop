@@ -35,8 +35,7 @@ private:
 	ImageItem* const i;
 
 public:
-	void set(C a, C b);
-	void set2(C a, C b);
+	void new_rubberBand(C a, C b);
 	void find_handle(C a, C b);
 
 	coordinates(double r, bool& c, ImageItem* i_): ratio{r}, constrained{c},

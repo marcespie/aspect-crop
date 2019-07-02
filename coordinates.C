@@ -27,22 +27,13 @@ inline T absdiff(T a, T b)
 }
 
 void
-coordinates::set(C a, C b)
+coordinates::new_rubberBand(C a, C b)
 {
 	xi = 1;
 	yj = 1;
-	x[0] = a;
-	y[0] = b;
+	x[0] = x[1] = a;
+	y[0] = x[1] = b;
 	moving = false;
-}
-
-void
-coordinates::set2(C a, C b)
-{
-	if (!moving) {
-		x[xi] = a;
-		y[yj] = b;
-	}
 }
 
 void
@@ -61,6 +52,12 @@ coordinates::find_handle(C a, C b)
 	// the rectangle
 	moving = absdiff(x[xi], a) > absdiff((x[0]+x[1])/2, a)
 	    || absdiff(y[yj], b) > absdiff((y[0]+y[1])/2, b);
+
+	if (!moving) {
+		x[xi] = a;
+		y[yj] = b;
+		adjust();
+	}
 }
 
 void
@@ -111,6 +108,7 @@ coordinates::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 		x[xi] = event->scenePos().x();
 		y[yj] = event->scenePos().y();
 	}
+	adjust();
 }
 
 void

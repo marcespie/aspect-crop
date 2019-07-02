@@ -173,10 +173,6 @@ ImageWindow::createActions()
 	z->setShortcut(QKeySequence("t"));
 	connect(z, SIGNAL(triggered()), this, SLOT(testTrim()));
 
-	z = b->addAction("&?");
-	z->setShortcut(QKeySequence("?"));
-	connect(z, SIGNAL(triggered()), this, SLOT(print()));
-
 	z = b->addAction("&Next");
 	z->setShortcut(QKeySequence("n"));
 	connect(z, SIGNAL(triggered()), this, SLOT(printNext()));

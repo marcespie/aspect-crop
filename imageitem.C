@@ -39,12 +39,10 @@ ImageItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	if (!rubberBand) {
 		rubberBand = 
 		    std::make_unique<QRubberBand>(QRubberBand::Rectangle, view);
-		c.set(a, b);
+		c.new_rubberBand(a, b);
 	} else {
 		c.find_handle(a, b);
 	}
-	c.set2(a, b);
-	c.adjust();
 	setRubberBand();
 	rubberBand->show();
 }
@@ -62,7 +60,6 @@ void
 ImageItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
 	c.mouseMoveEvent(event);
-	c.adjust();
 	setRubberBand();
 }
 
