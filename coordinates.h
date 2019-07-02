@@ -27,19 +27,20 @@ class coordinates
 {
 public:
 	C x[2], y[2];
-	ImageItem* i;
 private:
 	int xi, yj;
 	double ratio;
 	bool& constrained;
 	bool moving;
+	ImageItem* const i;
 
 public:
 	void set(C a, C b);
 	void set2(C a, C b);
 	void find_handle(C a, C b);
 
-	coordinates(double r, bool& c): ratio{r}, constrained{c}
+	coordinates(double r, bool& c, ImageItem* i_): ratio{r}, constrained{c},
+		i{i_}
 	{
 	}
 	coordinates(const coordinates&) = default;

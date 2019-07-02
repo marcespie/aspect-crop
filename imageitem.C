@@ -27,9 +27,8 @@
 ImageItem::ImageItem(QPixmap& p, QGraphicsView* v, const char* s, double r,
     bool& cs): 
     QGraphicsPixmapItem{p}, rubberBand{nullptr}, view{v}, title{s}, 
-    c{r,cs}
+    c{r,cs, this}
 {
-	c.i = this;
 }
 
 void 
