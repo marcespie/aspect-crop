@@ -16,25 +16,29 @@
 #ifndef COORDINATES_H
 #define COORDINATES_H
 
+#include <QRectF>
 #include <iosfwd>
 class QGraphicsSceneMouseEvent;
 
-using C = double;
+// This class is responsible for handling the constrained rubberband
+// all the logic, etc
 
 class ImageItem;
 
 class coordinates
 {
 public:
-	C x[2], y[2];
+	using C = double;
 private:
+	C x[2], y[2];
 	int xi, yj;
-	double ratio;
-	bool& constrained;
+	const double ratio;
+	bool& constrained;	// note this is a ref, so it can be changed
 	bool moving;
 	ImageItem* const i;
 
 public:
+	QRectF boundingRect() const;
 	void new_rubberBand(C a, C b);
 	void find_handle(C a, C b);
 

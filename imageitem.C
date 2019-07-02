@@ -50,8 +50,7 @@ ImageItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void
 ImageItem::setRubberBand()
 {
-	auto p = view->mapFromScene(c.x[0], c.y[0], c.x[1]-c.x[0], 
-	    c.y[1]-c.y[0]);
+	auto p = view->mapFromScene(c.boundingRect());
 
 	rubberBand->setGeometry(p.boundingRect());
 }

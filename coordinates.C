@@ -122,3 +122,8 @@ coordinates::printGeometry(std::ostream& o)
 		    "+" << round(x[0]) << "+" << round(y[0]);
 }
 
+QRectF
+coordinates::boundingRect() const
+{
+	return QRectF{x[0], y[0], x[1]-x[0], y[1]-y[0]};
+}
