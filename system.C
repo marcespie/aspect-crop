@@ -15,6 +15,7 @@
  */
 #include <sys/wait.h>
 #include <signal.h>
+#include <string.h>
 #include <iostream>
 #include <unistd.h>
 
